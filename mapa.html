@@ -1,0 +1,1252 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <title>Mapa</title>
+
+    <style>
+        #map {
+            height: 500px;
+        }  
+    </style>  
+
+    <!-- Prueba-->
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Favicon -->
+    <link href="img/favicon.ico" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet"> 
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+
+    <!-- Bootstrap-->
+    <link href="css/style.css" rel="stylesheet">
+
+    <!-- Hojas de estilo de Leaflet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+    <!-- Leaflet -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="js/mapa.js"></script>
+
+    <!-- Incluye tu archivo de departamentos -->
+    <script src="js/departamento.js"></script>
+
+    <style>
+        /* Estilos para la ventana flotante */
+        .ventana-flotante {
+          display: none;
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          background-color: #fff;
+          padding: 20px;
+          border: 1px solid #ccc;
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+          z-index: 1000;
+          max-width: 600px; /* Ajustar el ancho máximo según sea necesario */
+        }
+      
+        /* Estilos para el fondo oscuro */
+        .fondo-oscuro {
+          display: none;
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-color: rgba(0, 0, 0, 0.5);
+          z-index: 900;
+        }
+      
+        /* Estilo adicional para el formulario dentro de la ventana flotante */
+        .ventana-flotante form {
+          max-height: 400px;
+          overflow-y: auto;
+        }
+      </style>
+</head>
+
+
+
+<body>
+    <!-- Encabezado -->
+    <div class="container-fluid bg-light pt-3 d-none d-lg-block">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 text-center text-lg-left mb-2 mb-lg-0">
+                </div>
+                <div class="col-lg-6 text-center text-lg-right">
+                    <div class="d-inline-flex align-items-center">
+                        <a class="text-danger px-3" href="">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a class="text-danger px-3" href="">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a class="text-danger px-3" href="">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        <a class="text-danger px-3" href="">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a class="text-danger pl-3" href="">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Encabezado -->
+
+    <!-- Barra_general -->
+    <div class="container-fluid position-relative nav-bar p-0">
+        <div class="container-lg position-relative p-0 px-lg-3" style="z-index: 9;">
+            <nav class="navbar navbar-expand-lg bg-light navbar-light shadow-lg py-3 py-lg-0 pl-3 pl-lg-5">
+                <a href="" class="navbar-brand">
+                    <h1 class="m-0">
+                        <a href="index.html">
+                            <h1 class="m-0" style="color: red;">
+                                <span class="text-dark">ALERTA</span>
+                                <span class="text-danger">ÑAWI</span>
+                            </h1>
+                        </a>
+                    </h1>
+                </a>
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse justify-content-between px-3" id="navbarCollapse">
+                    <div class="navbar-nav ml-auto py-0">
+                        <a href="index.html" class="nav-item nav-link">INICIO</a>
+                        <a href="abc_contraloria.html" class="nav-item nav-link">ABC CONTRALORIA</a>
+                        <a href="reporte.html" class="nav-item nav-link active">REPORTE</a>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
+    <!-- Barra_general -->
+
+    <!-- Interfaz -->
+    <div class="container-fluid p-0">
+        <div id="header-carousel" class="carousel slide" data-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img class="w-100" src="img/carousel-1.jpg" alt="Image">
+                    <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
+                        <div class="p-3" style="max-width: 900px;">
+                            <h5 class="text-white text-uppercase mb-md-3">Accede a nuestro sitio para reportar emergencias y asegurar ayuda rápida.</h5>
+                            <h3 class="display-3 mb-md-4">
+                                <span class="text-white">ALERTA </span>
+                                <span class="text-danger">ÑAWI</span>
+                            </h3>
+                            <p style="font-size: 16px; color: white;">¡Descubre una nueva forma de informarte! Ahora puedes escuchar las páginas, haciéndolas accesibles para todos, incluso si tienes alguna discapacidad visual.</p>
+                            <p style="font-size: 16px; color: white;">¡Bienvenido a una experiencia inclusiva para cada uno de nosotros!</p>
+                            <p style="font-size: 16px; color: var(--orange);">🎧📚 #InclusiónParaTodos</p>
+                        </div>
+                    </div>
+                </div>
+             </div>
+        </div>
+    </div>
+    <!-- Interfaz -->
+
+    <!-- Funciones_leer -->
+    <script>
+    // Función para leer el contenido
+    function leerContenido1() {
+    // Obtener el contenido que se desea leer
+    var contenido = "Este mapa está diseñado para ser una herramienta colaborativa que brinda apoyo en situaciones de emergencia, ya sea en eventos naturales como fenómenos meteorológicos extremos o en cualquier otra circunstancia que requiera asistencia. Nos preocupamos por tu seguridad y bienestar, y este mapa ha sido creado con el propósito de facilitar la comunicación y coordinación entre personas dispuestas a ayudar y aquellas que necesitan asistencia. Este mapa te permite señalar tu ubicación y describir tus necesidades o habilidades. Además, proporciona una plataforma para que la comunidad pueda compartir actualizaciones sobre la ayuda enviada y recibida. Creemos en la fuerza de la solidaridad y la importancia de estar conectados en momentos críticos. ¡Gracias por ser parte de esta iniciativa y por contribuir a hacer de nuestra comunidad un lugar más fuerte y unido!";
+
+    
+    // Crear un nuevo objeto de síntesis de voz
+    var synth = window.speechSynthesis;
+    
+    // Crear un nuevo mensaje de síntesis de voz
+    var utterance = new SpeechSynthesisUtterance(contenido);
+    
+    // Reproducir el mensaje
+    synth.speak(utterance);
+    }
+    </script>
+    <!-- Funciones_leer -->
+
+    <!-- Texto -->
+    <div class="container" style="padding: 20px; color: #dc3545; margin-left: 4cm; margin-right: 5cm; text-align: justify;">
+        <br>
+        <h1 style="color: #dc3545; text-align: center;">¡BIENVENIDO!</h1>
+        <button id="leerPaginasOficiales" onclick="leerContenido1()" aria-label="Leer Paginas Oficiales" style="font-size: 24px; background: none; border: none; cursor: pointer; margin: auto; display: block;">
+            🔊
+        </button>
+        <div style="margin-left: 5cm; margin-right: 5cm;">
+            <p style="color: black;">Este mapa está diseñado para ser una herramienta colaborativa que brinda apoyo en situaciones de emergencia, ya sea en eventos naturales como fenómenos meteorológicos extremos o en cualquier otra circunstancia que requiera asistencia. Nos preocupamos por tu seguridad y bienestar, y este mapa ha sido creado con el propósito de facilitar la comunicación y coordinación entre personas dispuestas a ayudar y aquellas que necesitan asistencia. ¿Necesitas ayuda o estás dispuesto/a a ofrecerla? Este mapa te permite señalar tu ubicación y describir tus necesidades o habilidades. Además, proporciona una plataforma para que la comunidad pueda compartir actualizaciones sobre la ayuda enviada y recibida. Creemos en la fuerza de la solidaridad y la importancia de estar conectados en momentos críticos.</p>
+            <p style="color: black;">¡Gracias por ser parte de esta iniciativa y por contribuir a hacer de nuestra comunidad un lugar más fuerte y unido!</p>
+            <br>
+            <br>
+            <br>
+        </div>
+    </div>
+    <!-- Texto -->
+
+    <form id="form1" method="POST" action="ingreso.php">
+        <!-- Seleccion -->
+        <div class="container-fluid booking mt-5 pb-5">
+            <div class="container pb-3">
+                <div class="bg-light shadow" style="padding: 40px;">
+                    <div class="row align-items-center" style="min-height: 60px;">
+                        <div class="col-md-10">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="mb-3 mb-md-0">
+                                        <select id="departamento" name="departamento" class="custom-select px-4" style="height: 47px;">
+                                            <option selected >Departamento</option>
+                                            <option value="amazonas">Amazonas</option>
+                                            <option value="ancash">Ancash</option>
+                                            <option value="apurimac">Apurimac</option>
+                                            <option value="arequipa">Arequipa</option>
+                                            <option value="ayacucho">Ayacucho</option>
+                                            <option value="cajamarca">Cajamarca</option>
+                                            <option value="callao">Callao</option>
+                                            <option value="cusco">Cusco</option>
+                                            <option value="huancavelica">Huancavelica</option>
+                                            <option value="huánuco">Huánuco</option>
+                                            <option value="ica">Ica</option>
+                                            <option value="junin">Junin</option>
+                                            <option value="lalibertad">La Libertad</option>
+                                            <option value="lambayeque">Lambayeque</option>
+                                            <option value="lima">Lima</option>
+                                            <option value="loreto">Loreto</option>
+                                            <option value="madrededios">Madre de Dios</option>
+                                            <option value="moquegua">Moquegua</option>
+                                            <option value="pasco">Pasco</option>
+                                            <option value="piura">Piura</option>
+                                            <option value="puno">Puno</option>
+                                            <option value="sanmartin">San Martín</option>
+                                            <option value="tacna">Tacna</option>
+                                            <option value="tumbes">Tumbes</option>
+                                            <option value="ucayali">Ucayali</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="mb-3 mb-md-0">
+                                        <select id="provincia" name="provincia" class="custom-select px-4" style="height: 47px;">
+                                            <option selected >Provincia</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="mb-3 mb-md-0">
+                                        <select id="distrito" name="distrito" class="custom-select px-4" style="height: 47px;">
+                                            <option selected>Distrito</option>
+
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="mb-3 mb-md-0">
+                                    <input type="text" id="referencia" name="referencia" class="form-control px-4" style="height: 47px; max-width: 200px;" placeholder="Referencia" oninput="validarInput(this)">
+                                </div>                        
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <button class="btn btn-danger btn-block" type="button" style="height: 47px; margin-top: -2px;" onclick="ejecutarFunciones()" id="miBoton">Consultar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <!-- Seleccion-->   
+
+   <!-- Mapa -->
+   <div id="map"></div>
+
+   <script>
+        var map = L.map('map', {center: [-9.1900, -75.0152], // Centrado en el Perú
+        zoom: 6,
+        scrollWheelZoom: false // Deshabilita el zoom con la rueda del ratón
+        });
+
+       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+           attribution: '© OpenStreetMap contributors'
+       }).addTo(map);
+
+       // Cargar el archivo JSON de departamentos
+        fetch('js\departamento.js')
+        .then(response => response.json())
+        .then(data => {
+            // Usar los datos cargados
+            console.log(data);
+        })
+        .catch(error => console.error('Error cargando el archivo JSON:', error));
+
+       // Almacena una referencia al marcador actual
+       var marker;
+       // Llena dinámicamente las opciones de provincia según el departamento seleccionado
+       $("#departamento").change(function() {
+           var departamentoSeleccionado = $(this).val();
+           var provincias = departamentos[departamentoSeleccionado].provincias;
+
+           // Limpia el select de provincias
+           $("#provincia").empty();
+           $("#distrito").empty(); // Limpia también el select de distritos al cambiar el departamento
+
+           // Llena las opciones de provincia
+           $.each(provincias, function(provincia, distritos) {
+               $("#provincia").append('<option value="' + provincia + '">' + provincia + '</option>');
+           });
+
+           // Dispara el evento change para la provincia
+           $("#provincia").trigger("change");
+       });
+
+       // Llena dinámicamente las opciones de distrito según la provincia seleccionada
+       $("#provincia").change(function() {
+           var departamentoSeleccionado = $("#departamento").val();
+           var provinciaSeleccionada = $(this).val();
+           var distritos = departamentos[departamentoSeleccionado].provincias[provinciaSeleccionada];
+
+           // Limpia el select de distritos
+           $("#distrito").empty();
+
+           // Llena las opciones de distrito
+           $.each(distritos, function(distrito, coordenadas) {
+               $("#distrito").append('<option value="' + distrito + '">' + distrito + '</option>');
+           });
+       });
+
+       // Función para mostrar la ubicación en el mapa
+       function mostrarUbicacion() {
+        var departamento = $("#departamento").val();
+           var provincia = $("#provincia").val();
+           var distrito = $("#distrito").val();
+           var referencia = $("#referencia").val();
+
+           // Obtén las coordenadas del distrito seleccionado
+           var coordenadas = departamentos[departamento].provincias[provincia][distrito];
+
+           // Elimina el marcador existente, si hay alguno
+           if (marker) {
+               map.removeLayer(marker);
+           }
+
+           // Muestra un nuevo marcador en el mapa
+           marker = L.marker(coordenadas).addTo(map)
+               .bindPopup(`<b>${departamento}, ${provincia}, ${distrito}</b><br>${referencia}`)
+               .openPopup();
+
+           // Centra el mapa en la ubicación
+           map.panTo(coordenadas);
+           var fechaConsulta = obtenerFechaActual(); // Puedes ajustar esto según tus necesidades
+            var distritoSeleccionado = $("#distrito").val();
+            var fechaEmisionOrden = obtenerFechaEmisionOrden(); // Puedes ajustar esto según tus necesidades
+
+            // Actualiza el contenido dinámico en el área de información
+            $("#distrito-info").text(distritoSeleccionado);
+            $("#fecha-consulta-info").text(fechaConsulta);
+            $("#fecha-emision-orden-info").text(fechaEmisionOrden);
+
+       };
+
+ 
+       function obtenerFechaActual() {
+            var fecha = new Date();
+            return fecha.toLocaleDateString() + ', ' + fecha.toLocaleTimeString();
+        };
+
+        // Función para obtener la fecha de emisión de la orden (puedes ajustar según tus necesidades)
+        function obtenerFechaEmisionOrden() {
+            var fechaEmision = new Date(2023, 10, 23, 15, 30); // Año, mes (0-11), día, hora, minuto
+            return fechaEmision.toLocaleDateString() + ', ' + fechaEmision.toLocaleTimeString();
+        };
+
+        function actualizarMensajeActualizacion() {
+        var distritoInfo = $("#distrito-info").text().trim();
+        var alertMessage = $("#alertMessage");
+
+        if (distritoInfo !== "") {
+            // Si hay un distrito seleccionado, muestra el mensaje de actualización
+            alertMessage.text("No hay actualizaciones pendientes.").css("color", "red").show();
+        } else {
+            // Si no hay distrito seleccionado, oculta el mensaje de actualización
+            alertMessage.hide();
+        }
+        }
+        fetch('js\estado_emergencia.js')
+        .then(response => response.json())
+        .then(data => {
+            // Usar los datos cargados
+            console.log(datos);
+        })
+        .catch(error => console.error('Error cargando el archivo JSON:', error));
+
+        var datos = [
+            { departamento: "Amazonas", provincia: "Chachapoyas", distrito: "Chuquibamba", estado: "Emergencia" },
+            { departamento: "Amazonas", provincia: "Chachapoyas", distrito: "Granada", estado: "Emergencia" },
+            { departamento: "Amazonas", provincia: "Chachapoyas", distrito: "Quinjalca", estado: "Emergencia" },
+            { departamento: "Amazonas", provincia: "Chachapoyas", distrito: "San Francisco de Daguas", estado: "Emergencia" },
+            { departamento: "Amazonas", provincia: "Chachapoyas", distrito: "Soloco", estado: "Emergencia" },
+            { departamento: "Amazonas", provincia: "Chachapoyas", distrito: "Sonche", estado: "Emergencia" },
+            { departamento: "Amazonas", provincia: "Luya", distrito: "Lamud", estado: "Emergencia" },
+            { departamento: "Amazonas", provincia: "Luya", distrito: "Longuita", estado: "Emergencia" },
+            { departamento: "Amazonas", provincia: "Luya", distrito: "Lonya Chico", estado: "Emergencia" },
+            { departamento: "Amazonas", provincia: "Luya", distrito: "Luya Viejo", estado: "Emergencia" },
+            { departamento: "Amazonas", provincia: "Luya", distrito: "Maria", estado: "Emergencia" },
+            { departamento: "Amazonas", provincia: "Luya", distrito: "Trita", estado: "Emergencia" },
+            { departamento: "Amazonas", provincia: "Rodriguez de Mendoza", distrito: "Longar", estado: "Emergencia" },
+            { departamento: "Ancash", provincia: "Carhuaz", distrito: "Anta", estado: "Emergencia" },
+            { departamento: "Ancash", provincia: "Carhuaz", distrito: "Yungar", estado: "Emergencia" },
+            { departamento: "Ancash", provincia: "Corongo", distrito: "Bambas", estado: "Emergencia" },
+            { departamento: "Ancash", provincia: "Corongo", distrito: "La Pampa", estado: "Emergencia" },
+            { departamento: "Ancash", provincia: "Huaraz", distrito: "Jangas", estado: "Emergencia" },
+            { departamento: "Ancash", provincia: "Huaraz", distrito: "La Libertad", estado: "Emergencia" },
+            { departamento: "Ancash", provincia: "Huaylas", distrito: "Santo Toribio", estado: "Emergencia" },
+            { departamento: "Ancash", provincia: "Ocros", distrito: "Congas", estado: "Emergencia" },
+            { departamento: "Ancash", provincia: "Yungay", distrito: "Ranrahirca", estado: "Emergencia" },
+            { departamento: "Ancash", provincia: "Yungay", distrito: "Shupluy", estado: "Emergencia" },
+            { departamento: "Apurimac", provincia: "Andahuaylas", distrito: "Andahuaylas", estado: "Emergencia" },
+            { departamento: "Apurimac", provincia: "Andahuaylas", distrito: "Andarapa", estado: "Emergencia" },
+            { departamento: "Apurimac", provincia: "Antabamba", distrito: "Antabamba", estado: "Emergencia" },
+            { departamento: "Apurimac", provincia: "Chincheros", distrito: "Chincheros", estado: "Emergencia" },
+            { departamento: "Apurimac", provincia: "Grau", distrito: "Chuquibambilla", estado: "Emergencia" },
+            { departamento: "Ayacucho", provincia: "La Mar", distrito: "Ninabamba", estado: "Emergencia" },
+            { departamento: "Ayacucho", provincia: "La Mar", distrito: "Patibamba", estado: "Emergencia" },
+            { departamento: "Cajamarca", provincia: "Cajabamba", distrito: "Condebamba", estado: "Emergencia" },
+            { departamento: "Cajamarca", provincia: "Cajabamba", distrito: "Sitacocha", estado: "Emergencia" },
+            { departamento: "Cajamarca", provincia: "Cajamarca", distrito: "Encañada", estado: "Emergencia" },
+            { departamento: "Cajamarca", provincia: "Cajamarca", distrito: "Jesus", estado: "Emergencia" },
+            { departamento: "Cajamarca", provincia: "Cajamarca", distrito: "Llacanora", estado: "Emergencia" },
+            { departamento: "Cajamarca", provincia: "Cajamarca", distrito: "Matara", estado: "Emergencia" },
+            { departamento: "Cajamarca", provincia: "Cajamarca", distrito: "Namora", estado: "Emergencia" },
+            { departamento: "Cajamarca", provincia: "Celendin", distrito: "Celendin", estado: "Emergencia" },
+            { departamento: "Cajamarca", provincia: "Celendin", distrito: "Chumuch", estado: "Emergencia" },
+            { departamento: "Cajamarca", provincia: "Celendin", distrito: "Cortegana", estado: "Emergencia" },
+            { departamento: "Cajamarca", provincia: "Celendin", distrito: "Huasmin", estado: "Emergencia" },
+            { departamento: "Cajamarca", provincia: "Celendin", distrito: "Jorge Chavez", estado: "Emergencia" },
+            { departamento: "Cajamarca", provincia: "Celendin", distrito: "Jose Galvez", estado: "Emergencia" },
+            { departamento: "Cajamarca", provincia: "Celendin", distrito: "La Libertad de Pallan", estado: "Emergencia" },
+            { departamento: "Cajamarca", provincia: "Celendin", distrito: "Miguel Iglesias", estado: "Emergencia" },
+            { departamento: "Cajamarca", provincia: "Celendin", distrito: "Oxamarca", estado: "Emergencia" },
+            { departamento: "Cajamarca", provincia: "Celendin", distrito: "Sorochuco", estado: "Emergencia" },
+            { departamento: "Cajamarca", provincia: "Celendin", distrito: "Sucre", estado: "Emergencia" },
+            { departamento: "Cajamarca", provincia: "Celendin", distrito: "Utco", estado: "Emergencia" },
+            { departamento: "Cajamarca", provincia: "Chota", distrito: "Anguia", estado: "Emergencia" },
+            { departamento: "Cajamarca", provincia: "Chota", distrito: "Chadin", estado: "Emergencia" },
+            { departamento: "Cajamarca", provincia: "Chota", distrito: "Chalamarca", estado: "Emergencia" },
+            { departamento: "Cajamarca", provincia: "Chota", distrito: "Chiguirip", estado: "Emergencia" },
+            { departamento: "Cajamarca", provincia: "Chota", distrito: "Chimban", estado: "Emergencia" },
+            { departamento: "Cajamarca", provincia: "Chota", distrito: "Choropampa", estado: "Emergencia" },
+            { departamento: "Cajamarca", provincia: "Chota", distrito: "Chota", estado: "Emergencia" },
+            { departamento: "Cajamarca", provincia: "Chota", distrito: "Cochabamba", estado: "Emergencia" },
+            { departamento: "Cajamarca", provincia: "Chota", distrito: "Conchan", estado: "Emergencia" },
+            { departamento: "Cajamarca", provincia: "Chota", distrito: "Lajas", estado: "Emergencia" },
+            { departamento: "Cajamarca", provincia: "Chota", distrito: "Paccha", estado: "Emergencia" },
+            { departamento: "Cajamarca", provincia: "Chota", distrito: "Pion", estado: "Emergencia" },
+            { departamento: "Cajamarca", provincia: "Chota", distrito: "Tacabamba", estado: "Emergencia" },
+            { departamento: "Cajamarca", provincia: "Cutervo", distrito: "Callayuc", estado: "Emergencia" },
+            { departamento: "Cajamarca", provincia: "Cutervo", distrito: "Choros", estado: "Emergencia" },
+            { departamento: "Cajamarca", provincia: "Cutervo", distrito: "Cujillo", estado: "Emergencia" },
+            { departamento: "Cajamarca", provincia: "Cutervo", distrito: "Cutervo", estado: "Emergencia" },
+            { departamento: "Cajamarca", provincia: "Cutervo", distrito: "La Ramada", estado: "Emergencia" },
+            { departamento: "Cajamarca", provincia: "Cutervo", distrito: "Querocotillo", estado: "Emergencia" },
+            { departamento: "Cajamarca", provincia: "Cutervo", distrito: "San Andres de Cutervo", estado: "Emergencia" },
+            { departamento: "Cajamarca", provincia: "Cutervo", distrito: "San Juan de Cutervo", estado: "Emergencia" },
+            { departamento: "Cajamarca", provincia: "Cutervo", distrito: "San Luis de Lucma", estado: "Emergencia" },
+            { departamento: "Cajamarca", provincia: "Cutervo", distrito: "Santa Cruz", estado: "Emergencia" },
+            { departamento: "Cajamarca", provincia: "Cutervo", distrito: "Santo Domingo de la Capilla", estado: "Emergencia" },
+            { departamento: "Cajamarca", provincia: "Cutervo", distrito: "Santo Tomas", estado: "Emergencia" },
+            { departamento: "Cajamarca", provincia: "Cutervo", distrito: "Socota", estado: "Emergencia" },
+            { departamento: "Cajamarca", provincia: "Cutervo", distrito: "Toribio Casanova", estado: "Emergencia" },
+            { departamento: "Cajamarca", provincia: "Hualgayoc", distrito: "Bambamarca", estado: "Emergencia" },
+            { departamento: "Cajamarca", provincia: "Hualgayoc", distrito: "Hualgayoc", estado: "Emergencia" },
+            { departamento: "Cajamarca", provincia: "Jaen", distrito: "Bellavista", estado: "Emergencia" },
+            { departamento: "Cajamarca", provincia: "Jaen", distrito: "Chontali", estado: "Emergencia" },
+            { departamento: "Cajamarca", provincia: "Jaen", distrito: "Huabal", estado: "Emergencia" },
+            { departamento: "Cajamarca", provincia: "Jaen", distrito: "Jaen", estado: "Emergencia" },
+            { departamento: "Cajamarca", provincia: "Jaen", distrito: "Las Pirias", estado: "Emergencia" },
+            { departamento: "Cajamarca", provincia: "Jaen", distrito: "Pomahuaca", estado: "Emergencia" },
+            { departamento: "Cajamarca", provincia: "Jaen", distrito: "San Felipe", estado: "Emergencia" },
+            { departamento: "Cajamarca", provincia: "Jaen", distrito: "San Jose del Alto", estado: "Emergencia" },
+            { departamento: "Cajamarca", provincia: "San Ignacio", distrito: "La Coipa", estado: "Emergencia" },
+            { departamento: "Cajamarca", provincia: "San Ignacio", distrito: "Tabaconas", estado: "Emergencia" },
+            { departamento: "Cajamarca", provincia: "San Marcos", distrito: "Chancay", estado: "Emergencia" },
+            { departamento: "Cajamarca", provincia: "San Marcos", distrito: "Eduardo Villanueva", estado: "Emergencia" },
+            { departamento: "Cajamarca", provincia: "San Marcos", distrito: "Gregorio Pita", estado: "Emergencia" },
+            { departamento: "Cajamarca", provincia: "San Marcos", distrito: "Ichocan", estado: "Emergencia" },
+            { departamento: "Cajamarca", provincia: "San Marcos", distrito: "Jose Manuel Quiroz", estado: "Emergencia" },
+            { departamento: "Cajamarca", provincia: "San Marcos", distrito: "Jose Sabogal", estado: "Emergencia" },
+            { departamento: "Cajamarca", provincia: "San Marcos", distrito: "Pedro Galvez", estado: "Emergencia" },
+            { departamento: "Huancavelica", provincia: "Churcampa", distrito: "Anco", estado: "Emergencia" },
+            { departamento: "Ica", provincia: "Chincha", distrito: "Chavin", estado: "Emergencia" },
+            { departamento: "Ica", provincia: "Ica", distrito: "Ica", estado: "Emergencia" },
+            { departamento: "La Libertad", provincia: "Bolivar", distrito: "Bolivar", estado: "Emergencia" },
+            { departamento: "La Libertad", provincia: "Bolivar", distrito: "Ucuncha", estado: "Emergencia" },
+            { departamento: "La Libertad", provincia: "Pataz", distrito: "Huancaspata", estado: "Emergencia" },
+            { departamento: "La Libertad", provincia: "Pataz", distrito: "Huayo", estado: "Emergencia" },
+            { departamento: "La Libertad", provincia: "Pataz", distrito: "Santiago de Challas", estado: "Emergencia" },
+            { departamento: "La Libertad", provincia: "Pataz", distrito: "Taurija", estado: "Emergencia" },
+            { departamento: "La Libertad", provincia: "Sanchez Carrion", distrito: "Marcabal", estado: "Emergencia" },
+            { departamento: "La Libertad", provincia: "Trujillo", distrito: "Alto Trujillo", estado: "Emergencia" },
+            { departamento: "Lima", provincia: "Canta", distrito: "Arahuay", estado: "Emergencia" },
+            { departamento: "Lima", provincia: "Canta", distrito: "Huamantanga", estado: "Emergencia" },
+            { departamento: "Lima", provincia: "Cañete", distrito: "Imperial", estado: "Emergencia" },
+            { departamento: "Lima", provincia: "Cañete", distrito: "Lunahuana", estado: "Emergencia" },
+            { departamento: "Lima", provincia: "Cañete", distrito: "Quilmana", estado: "Emergencia" },
+            { departamento: "Lima", provincia: "Huarochiri", distrito: "Callahuanca", estado: "Emergencia" },
+            { departamento: "Lima", provincia: "Huarochiri", distrito: "Carampoma", estado: "Emergencia" },
+            { departamento: "Lima", provincia: "Huarochiri", distrito: "Huachupampa", estado: "Emergencia" },
+            { departamento: "Lima", provincia: "Huarochiri", distrito: "Huanza", estado: "Emergencia" },
+            { departamento: "Lima", provincia: "Huarochiri", distrito: "Huarochiri", estado: "Emergencia" },
+            { departamento: "Lima", provincia: "Huarochiri", distrito: "Langa", estado: "Emergencia" },
+            { departamento: "Lima", provincia: "Huarochiri", distrito: "San Andres de Tupicocha", estado: "Emergencia" },
+            { departamento: "Lima", provincia: "Huarochiri", distrito: "San Bartolome", estado: "Emergencia" },
+            { departamento: "Lima", provincia: "Huarochiri", distrito: "San Mateo de Otao", estado: "Emergencia" },
+            { departamento: "Lima", provincia: "Huarochiri", distrito: "San Pedro de Casta", estado: "Emergencia" },
+            { departamento: "Lima", provincia: "Huarochiri", distrito: "San Pedro de Laraos", estado: "Emergencia" },
+            { departamento: "Lima", provincia: "Huarochiri", distrito: "Santa Cruz de Cocachacra", estado: "Emergencia" },
+            { departamento: "Lima", provincia: "Huarochiri", distrito: "Surco", estado: "Emergencia" },
+            { departamento: "Lima", provincia: "Lima", distrito: "Puente Piedra", estado: "Emergencia" },
+            { departamento: "Lima", provincia: "Oyon", distrito: "Cochamarca", estado: "Emergencia" },
+            { departamento: "Lima", provincia: "Oyon", distrito: "Pachangara", estado: "Emergencia" },
+            { departamento: "Lima", provincia: "Yauyos", distrito: "Cacra", estado: "Emergencia" },
+            { departamento: "Lima", provincia: "Yauyos", distrito: "Catahuasi", estado: "Emergencia" },
+            { departamento: "Lima", provincia: "Yauyos", distrito: "Omas", estado: "Emergencia" },
+            { departamento: "Lima", provincia: "Yauyos", distrito: "Quinches", estado: "Emergencia" },
+            { departamento: "Lima", provincia: "Yauyos", distrito: "San Pedro de Pilas", estado: "Emergencia" },
+            { departamento: "Lima", provincia: "Yauyos", distrito: "Tauripampa", estado: "Emergencia" },
+            { departamento: "Lima", provincia: "Yauyos", distrito: "Viñac", estado: "Emergencia" },
+            { departamento: "Callao", provincia: "Callao", distrito: "Callao", estado: "Emergencia" },
+            { departamento: "Callao", provincia: "Callao", distrito: "Carmen de la Legua Reynoso", estado: "Emergencia" },
+            { departamento: "Callao", provincia: "Callao", distrito: "Ventanilla", estado: "Emergencia" },
+            { departamento: "Pasco", provincia: "Pasco", distrito: "Chaupimarca", estado: "Emergencia" },
+        ];
+
+        function verificarEmergencia() {
+            var departamentoIngresado = $("#departamento").val().trim().toLowerCase();
+            var provinciaIngresada = $("#provincia").val().trim().toLowerCase();
+            var distritoIngresado = $("#distrito").val().trim().toLowerCase();
+
+            // Filtra los lugares de emergencia que coincidan con los valores ingresados
+            var lugaresEnEmergencia = datos.filter(function (lugar) {
+                return (
+                    lugar.departamento.toLowerCase() === departamentoIngresado &&
+                    lugar.provincia.toLowerCase() === provinciaIngresada &&
+                    lugar.distrito.toLowerCase() === distritoIngresado
+                );
+            });
+
+            // Muestra el resultado en el recuadro
+            var mensaje = lugaresEnEmergencia.length > 0
+                ? "¡Su distrito está en emergencia!"
+                : "Su distrito no está en emergencia.";
+
+            // Agrega la fecha de la consulta
+            var fechaConsulta = new Date().toLocaleString();
+            mensaje += "<br>Consulta realizada el " + fechaConsulta;
+
+            // Muestra el mensaje en el recuadro de emergencia
+            $("#alertMessage").html(mensaje);
+            $("#emergencia").show();
+        };
+
+        function ejecutarFunciones() {
+            mostrarUbicacion();
+            verificarEmergencia();
+            guardarDatos();
+        };
+
+        $("#miBoton").click(function() {
+            ejecutarFunciones();
+        });
+
+        </script>
+
+   <br>
+   <br>
+   <br> 
+
+
+    </div>
+    <div id="emergencia" style="margin-left: 5cm; margin-right: 5cm; display: flex; flex-direction: column; align-items: center;">
+        <h3>Resultados:</h3>
+        <div style="display: flex; justify-content: space-between; width: 100%;">
+            <div style="flex: 1;">
+                <p>Estado: <span id="alertMessage"></span></p>
+                <p>Fecha de consulta: <span id="fecha-consulta-info"></span></p>
+            </div>
+            <div style="flex: 1;">
+                <p>Distrito: <span id="distrito-info"></span></p>
+                <p>Fecha de Emisión de la Orden: <span id="fecha-emision-orden-info"></span></p>
+            </div>
+        </div>
+        <button class="btn btn-danger btn-block" type="button" onclick="mostrarVentana()" style="height: 47px; margin-top: -2px; width: 180px">Reportar</button>
+    </div>
+    
+
+
+
+    
+    <div class="fondo-oscuro" id="fondoOscuro"></div>
+    <div class="ventana-flotante" id="ventanaFlotante">
+        <h2 style="color: rgb(153, 91, 91)(229, 110, 110); font-size: 16px; text-transform: uppercase; text-align: center;">Seleccione su tipo de solicitud</h2>
+        <div style="text-align: center;">
+            <button class="btn btn-danger" type="button" onclick="mostrarFormulario('persona')">Persona Natural</button>
+            <button class="btn btn-danger" type="button" onclick="mostrarFormulario('empresa')">Empresa o Entidad</button>
+        </div>
+                
+
+        <!-- Formulario para Persona Natural -->
+        <form id="formularioPersona" method="POST" action="alerta.php" style="display: none;">
+            <br>
+            <div class="form-group">
+                <label for="nombrePersona">Nombres y Apellidos:</label>
+                <input type="text" id="nombrePersona" name="nombrePersona" class="form-control" placeholder="Ingrese Nombres y Apellidos" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="dniPersona">Número de Documento de Identidad (DNI):</label>
+                <input type="text" id="dniPersona" name="dniPersona" class="form-control" pattern="[0-9]{8}" placeholder="Ingrese DNI" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="telefonoPersona">Número de Teléfono:</label>
+                <input type="tel" id="telefonoPersona" name="telefonoPersona" class="form-control" pattern="[0-9]{9}" placeholder="Ingrese Teléfono" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="tipoDesastrePersona">Tipo de Desastre Natural:</label>
+                <select id="tipoDesastrePersona" name="tipoDesastrePersona" class="form-control" required>
+                    <option value="Terremoto">Fenómenos</option>
+                    <option value="Inundación">Inundación</option>
+                    <option value="Incendio">Sequía</option>
+                    <option value="Otro">Otro:</option>
+                </select>
+                <input type="text" id="otroDesastrePersona" name="otroDesastrePersona" class="form-control" style="display: none;">
+            </div>
+            
+            <div class="form-group">
+                <label for="fechaHoraDesastrePersona">Fecha y Hora del Desastre:</label>
+                <input type="datetime-local" id="fechaHoraDesastrePersona" name="fechaHoraDesastrePersona" class="form-control" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="ubicacionDesastrePersona">Ubicación del Desastre:</label>
+                <input type="text" id="ubicacionDesastrePersona" name="ubicacionDesastrePersona" class="form-control" placeholder="Ingrese Ubicación del Desastre" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="descripcionSituacionPersona">Descripción breve de las pérdidas o necesidades:</label>
+                <textarea id="descripcionSituacionPersona" name="descripcionSituacionPersona" class="form-control" placeholder="Ingrese Descripción" required></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="helpType">Tipo de Ayuda:</label>
+                <select id="helpType" name="helpType" class="custom-select px-4" style="height: 47px;" required="required">
+                    <option value="" disabled selected>Seleccione una ayuda</option>
+                    <option value="Comida">Envío de Víveres</option>
+                    <option value="ExtraccionAgua">Extracción de Agua</option>
+                    <option value="Refugio">Refugio</option>
+                    <option value="AsistenciaMedica">Asistencia Médica</option>
+                    <option value="AsistenciaMedica">Recorte de Servicios</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="urgenciaPersona">Grado de Urgencia:</label>
+                <select id="urgenciaPersona" name="urgenciaPersona" class="form-control" required>
+                    <option value="Bajo">Bajo</option>
+                    <option value="Medio">Medio</option>
+                    <option value="Alto">Alto</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <div class="form-check">
+                    <input type="checkbox" id="confirmacionPersona" name="confirmacionPersona" class="form-check-input" required>
+                    <label class="form-check-label" for="confirmacionPersona">Certifico que la información proporcionada es precisa y completa.</label>
+                </div>
+            </div>
+            
+            <div class="text-center">
+                <button class="btn btn-success" type="submit" id="Alerta" name="accion" value="Alerta">Enviar</button>
+                <button class="btn btn-danger" onclick="cerrarVentana()">Cancelar</button>
+            </div>
+        </form>
+        
+        <form id="formularioEmpresa" style="display: none;">
+            <br>
+            <h4>Información de la Empresa:</h4>
+            <div class="form-group">
+                <label for="nombreEmpresa">Nombre de la Empresa:</label>
+                <input type="text" id="nombreEmpresa" class="form-control p-4" placeholder="Ingrese el nombre de la empresa" required="required" />
+                <span id="nombreEmpresaError" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label for="rucEmpresa">RUC o Identificación Tributaria:</label>
+                <input type="text" id="rucEmpresa" class="form-control p-4" placeholder="Ingrese el RUC o identificación tributaria" required="required" />
+                <span id="rucEmpresaError" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label for="nombreContactoEmpresa">Nombre del Contacto:</label>
+                <input type="text" id="nombreContactoEmpresa" class="form-control p-4" placeholder="Ingrese el nombre del contacto" required="required" />
+                <span id="nombreContactoEmpresaError" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label for="cargoContactoEmpresa">Cargo del Contacto:</label>
+                <input type="text" id="cargoContactoEmpresa" class="form-control p-4" placeholder="Ingrese el cargo del contacto" required="required" />
+                <span id="cargoContactoEmpresaError" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label for="correoContactoEmpresa">Correo Electrónico del Contacto:</label>
+                <input type="email" id="correoContactoEmpresa" class="form-control p-4" placeholder="Ingrese el correo electrónico del contacto" required="required" />
+                <span id="correoContactoEmpresaError" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label for="telefonoContactoEmpresa">Número de Teléfono del Contacto:</label>
+                <input type="tel" id="telefonoContactoEmpresa" class="form-control p-4" placeholder="Ingrese el número de teléfono del contacto" pattern="[0-9]{9}" title="Ingrese exactamente 9 dígitos numéricos" required="required" />
+                <span id="telefonoContactoEmpresaError" class="text-danger"></span>
+            </div>
+        
+        
+            <div class="form-group">
+                <label for="tipoDesastreEmpresa">Tipo de Desastre Natural:</label>
+                <select id="tipoDesastreEmpresa" class="form-control" required>
+                    <option value="Terremoto">Fenómenos Naturales</option>
+                    <option value="Inundación">Inundación</option>
+                    <option value="Incendio">Sequía</option>
+                    <option value="Otro">Otro:</option>
+                </select>
+                <input type="text" id="otroDesastreEmpresa" style="display: none;">
+                <span id="tipoDesastreEmpresaError" class="text-danger"></span>
+            </div>
+        
+            <!-- Repite este bloque para cada pregunta en el cuestionario -->
+        
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" id="confirmacionEmpresa" required>
+                    Certifico que la información proporcionada es precisa y completa.
+                </label>
+                <span id="confirmacionEmpresaError" class="text-danger"></span>
+            </div>
+            <div class="text-center">
+                <button class="btn btn-warning btn-block" onclick="verificarTrabajadores('empresa')">Verificar Trabajadores</button>
+                <button class="btn btn-success btn-block" onclick="enviarFormulario('empresa')">Enviar</button>
+                <button class="btn btn-danger btn-block" onclick="cerrarVentana()">Cancelar</button>
+            </div>
+        </form>
+        
+    </div>
+    <script>
+        function validarNombreApellido(texto) {
+            // Expresión regular que permite solo letras, espacios, apóstrofes, guiones y tildes
+            const regex = /^[A-Za-záéíóúÁÉÍÓÚüÜ\s'-]+$/;
+            return regex.test(texto);
+        }
+    
+        function validarDNI(dni) {
+            // Expresión regular que permite solo 8 dígitos numéricos
+            const regex = /^[0-9]{8}$/;
+            return regex.test(dni);
+        }
+    
+        function validarTelefono(telefono) {
+            // Expresión regular que permite solo 9 dígitos numéricos
+            const regex = /^[0-9]{9}$/;
+            return regex.test(telefono);
+        }
+    
+        function validarFormularioPersona() {
+            const nombrePersona = document.getElementById("nombrePersona").value;
+            const dniPersona = document.getElementById("dniPersona").value;
+            const telefonoPersona = document.getElementById("telefonoPersona").value;
+            const confirmacionPersona = document.getElementById("confirmacionPersona").checked;
+    
+            if (!validarNombreApellido(nombrePersona)) {
+                alert("Por favor, ingrese un nombre y apellido válidos.");
+                return false;
+            }
+    
+            if (!validarDNI(dniPersona)) {
+                alert("Por favor, ingrese un DNI válido (8 dígitos numéricos).");
+                return false;
+            }
+    
+            if (!validarTelefono(telefonoPersona)) {
+                alert("Por favor, ingrese un número de teléfono válido (9 dígitos numéricos).");
+                return false;
+            }
+    
+            if (!confirmacionPersona) {
+                alert("Por favor, certifique que la información proporcionada es precisa y completa.");
+                return false;
+            }
+    
+            // Aquí puedes agregar más validaciones para otros campos del formulario
+    
+            return true; // El formulario es válido
+        }
+    
+        function enviarFormulario(tipo) {
+            if (tipo === 'persona' && validarFormularioPersona()) {
+                // Aquí puedes agregar lógica para enviar el formulario de persona
+                alert("Formulario de persona enviado con éxito.");
+            } else if (tipo === 'empresa' && validarFormularioEmpresa()) {
+                // Aquí puedes agregar lógica para enviar el formulario de empresa
+                alert("Formulario de empresa enviado con éxito.");
+            }
+        }
+    </script>
+
+    
+    <script>
+        function mostrarVentana() {
+          document.getElementById('ventanaFlotante').style.display = 'block';
+          document.getElementById('fondoOscuro').style.display = 'block';
+        }
+      
+        function cerrarVentana() {
+          document.getElementById('ventanaFlotante').style.display = 'none';
+          document.getElementById('fondoOscuro').style.display = 'none';
+        }
+        
+      
+        function mostrarFormulario(tipo) {
+          if (tipo === 'persona') {
+            document.getElementById('formularioPersona').style.display = 'block';
+            document.getElementById('formularioEmpresa').style.display = 'none';
+          } else if (tipo === 'empresa') {
+            document.getElementById('formularioPersona').style.display = 'none';
+            document.getElementById('formularioEmpresa').style.display = 'block';
+          }
+        }
+      
+        function enviarFormulario(tipo) {
+          // Aquí puedes agregar lógica para validar los campos y enviar el formulario
+          // según el tipo (persona o empresa).
+          // Recomiendo verificar el estado de validación de los campos antes de enviar.
+      
+          // Si todo está bien, cierra la ventana flotante.
+          cerrarVentana();
+        }
+
+        function verificarTrabajadores(tipo) {
+            if (tipo === 'empresa') {
+            // Obtener el valor del campo con los números de trabajadores
+            var numerosTrabajadores = document.getElementById('nombresTrabajadoresEmpresa').value.split(',');
+
+            // Verificar si la cantidad de trabajadores coincide con la cantidad de datos ingresados
+            if (numerosTrabajadores.length !== document.getElementById('dniTrabajadoresEmpresa').value.split(',').length
+                || numerosTrabajadores.length !== document.getElementById('telefonoTrabajadoresEmpresa').value.split(',').length) {
+                alert("La cantidad de trabajadores no coincide con la información ingresada.");
+                return;
+            }
+
+            // Si la verificación es exitosa, puedes realizar otras acciones o simplemente continuar con el proceso.
+            }
+        }
+
+    </script>
+
+<script>
+    function validarNombres(nombres) {
+        // Expresión regular que permite nombres separados por ; o saltos de línea
+        const regex = /^[a-zA-ZÀ-ÿ\s'-]+(?:;|\n|$)+[a-zA-ZÀ-ÿ\s'-]+(?:;|\n|$)*$/;
+        return regex.test(nombres);
+    }
+
+    // Otras funciones de validación aquí...
+
+    function validarFormularioEmpresa() {
+        const nombreEmpresa = document.getElementById("nombreEmpresa").value;
+        const rucEmpresa = document.getElementById("rucEmpresa").value;
+        const nombreContactoEmpresa = document.getElementById("nombreContactoEmpresa").value;
+        const telefonoContactoEmpresa = document.getElementById("telefonoContactoEmpresa").value;
+        const confirmacionEmpresa = document.getElementById("confirmacionEmpresa").checked;
+
+        if (!validarNombres(nombreEmpresa)) {
+            alert("Por favor, ingrese un nombre de empresa válido.");
+            return false;
+        }
+
+        // Agregar más validaciones según sea necesario
+
+        return true;
+    }
+</script>
+   <!-- Funciones_leer -->
+   <script>
+    // Función para leer el contenido
+    function leerContenido2() {
+    // Obtener el contenido que se desea leer
+    var contenido = "Tu participación es esencial para construir un sistema de ayuda más efectivo durante fenómenos. Cada experiencia compartida contribuye a crear soluciones más sólidas. ¡Anímate a ser parte del cambio y hacer la diferencia! Tu voz cuenta y marca la pauta para un futuro más seguro y resiliente. ¡Gracias por formar parte de este importante proceso de mejora!";
+
+    
+    // Crear un nuevo objeto de síntesis de voz
+    var synth = window.speechSynthesis;
+    
+    // Crear un nuevo mensaje de síntesis de voz
+    var utterance = new SpeechSynthesisUtterance(contenido);
+    
+    // Reproducir el mensaje (Prueba8)
+    synth.speak(utterance);
+    }
+    </script>
+    <!-- Funciones_leer -->
+
+    <form id="form2" method="POST" action="ingreso.php">
+        <!-- Registro Inicio -->
+        <div class="container-fluid bg-danger py-5" style="margin: 90px 0;">
+            <div class="container py-5">
+                <div class="row align-items-center">
+                    <div class="col-lg-7 mb-5 mb-lg-0">
+                        <div class="mb-4">
+                            <button id="leerPaginasOficiales" onclick="leerContenido2()" aria-label="Leer Paginas Oficiales" style="font-size: 24px; background: none; border: none; cursor: pointer;">
+                                🔊
+                            </button>
+                            <h6 class="text-primary text-uppercase" style="letter-spacing: 5px;">Encuesta de Satisfacción</h6>
+                            <h1 class="text-white"> Ayuda por Fenómenos</h1>
+                        </div>
+                        <p class="text-white" style="text-align: justify; margin: 0 1cm;">
+                            Tu participación es esencial para construir un sistema de ayuda más efectivo durante fenómenos. Cada experiencia compartida contribuye a crear soluciones más sólidas. ¡Anímate a ser parte del cambio y hacer la diferencia! Tu voz cuenta y marca la pauta para un futuro más seguro y resiliente. ¡Gracias por formar parte de este importante proceso de mejora!
+                        </p>
+                    </div>
+                    <div class="col-lg-5">
+                        <div class="card border-0">
+                            <div class="card-header bg-danger text-center p-4">
+                            </div>
+                            <div class="card-body rounded-bottom bg-white p-5" style="max-height: 400px; overflow-y: auto;">
+                                <form id="surveyForm" onsubmit="return validateForm()">
+                                    <div class="form-group">
+                                        <label for="dni">DNI:</label>
+                                        <input type="text" id="dni" name="dni" class="form-control p-4" placeholder="Ingrese su DNI" pattern="[0-9]{8}" title="Ingrese exactamente 8 dígitos numéricos sin espacios ni caracteres especiales" required="required" />
+                                        <span id="dniError" class="text-danger"></span>
+                                    </div>
+                                    <input type="hidden" id="departamento" name="departamento" value="">
+                                    <input type="hidden" id="provincia" name="provincia" value="">
+                                    <input type="hidden" id="distrito" name="distrito" value="">
+                                    <div class="form-group">
+                                        <label for="verificationCode">Código de Verificación:</label>
+                                        <input type="text" id="verificationCode" name="verificationCode" class="form-control p-4" placeholder="Ingrese el código de verificación" pattern="\d" title="Ingrese solo un dígito numérico sin espacios ni caracteres especiales" required="required" />
+                                        <span id="verificationCodeError" class="text-danger"></span>
+                                        
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="helpType">Tipo de Ayuda:</label>
+                                        <select id="helpType" name="helpType" class="custom-select px-4" style="height: 47px;" required="required">
+                                            <option value="" disabled selected>Seleccione una ayuda</option>
+                                            <option value="Comida">Comida</option>
+                                            <option value="Salud">Salud</option>
+                                            <option value="ExtraccionAgua">Extracción de Agua</option>
+                                            <option value="Refugio">Refugio</option>
+                                            <option value="AsistenciaMedica">Asistencia Médica</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="question1">1. ¿Cómo califica la ayuda brindada?</label>
+                                        <select class="custom-select px-4" style="height: 47px;" id="question1" name="question1" required="required">
+                                            <option value="" disabled selected>Seleccione una opción</option>
+                                            <option value="5">Muy Satisfecho</option>
+                                            <option value="4">Satisfecho</option>
+                                            <option value="3">Neutral</option>
+                                            <option value="2">Insatisfecho</option>
+                                            <option value="1">Muy Insatisfecho</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="question2">2. ¿Llegó en el periodo estimado?</label>
+                                        <select class="custom-select px-4" style="height: 47px;" id="question2" name="question2" required="required">
+                                            <option value="" disabled selected>Seleccione una opción</option>
+                                            <option value="Sí">Sí</option>
+                                            <option value="No">No</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="question3">3. ¿En qué nivel de emergencia considera que se encuentra?</label>
+                                        <select class="custom-select px-4" style="height: 47px;" id="question3" name="question3" required="required">
+                                            <option value="" disabled selected>Seleccione una opción</option>
+                                            <option value="5">Muy Crítico</option>
+                                            <option value="4">Crítico</option>
+                                            <option value="3">Moderado</option>
+                                            <option value="2">Leve</option>
+                                            <option value="1">Sin Emergencia</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="question4">4. ¿Cubrió la necesidad que presentabas?</label>
+                                        <select class="custom-select px-4" style="height: 47px;" id="question4" name="question4" required="required">
+                                            <option value="" disabled selected>Seleccione una opción</option>
+                                            <option value="Sí">Sí</option>
+                                            <option value="No">No</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="question5">5. ¿Hubo algún problema durante la ayuda? (Opcional)</label>
+                                        <select class="custom-select px-4" style="height: 47px;" id="question5" name="question5">
+                                            <option value="" disabled selected>Seleccione una opción</option>
+                                            <option value="Sí">Sí</option>
+                                            <option value="No">No</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <button class="btn btn-danger btn-block py-3" type="submit" id="Enviar" name="accion" value="Enviar">Enviar Encuesta</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <script>
+        function guardarDatos() {
+            // Obtener los valores de departamento, provincia y distrito
+            var departamentoValue = $("#departamento").val();
+            var provinciaValue = $("#provincia").val();
+            var distritoValue = $("#distrito").val();
+    
+            // Establecer los valores en campos ocultos en el formulario 2
+            document.querySelector('#form2').insertAdjacentHTML('beforeend', '<input type="hidden" name="departamento" value="' + departamentoValue + '">');
+            document.querySelector('#form2').insertAdjacentHTML('beforeend', '<input type="hidden" name="provincia" value="' + provinciaValue + '">');
+            document.querySelector('#form2').insertAdjacentHTML('beforeend', '<input type="hidden" name="distrito" value="' + distritoValue + '">');
+        }
+    </script>
+    <!-- Registro Fin -->
+
+    <script>
+        function validateForm() {
+            var dniInput = document.getElementById("dni");
+            var verificationCodeInput = document.getElementById("verificationCode");
+
+            // Verificar si ya se ha registrado una encuesta con el mismo DNI y Código de Validación
+            var lastSurveyTimeKey = "lastSurveyTime_" + dniInput.value + "_" + verificationCodeInput.value;
+            var lastSurveyTime = localStorage.getItem(lastSurveyTimeKey);
+
+            if (lastSurveyTime) {
+                var oneWeekAgo = new Date();
+                oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+
+                if (new Date(lastSurveyTime) > oneWeekAgo) {
+                    alert("Ya has registrado una encuesta esta semana. Gracias por tu participación.");
+                    return false;
+                }
+            }
+
+            // Validación del DNI
+            var dniError = document.getElementById("dniError");
+            if (!dniInput.checkValidity()) {
+                dniError.textContent = "Ingrese exactamente 8 dígitos numéricos sin espacios ni caracteres especiales.";
+                return false;
+            } else {
+                dniError.textContent = "";
+            }
+
+            // Validación del Código de Verificación
+            var verificationCodeError = document.getElementById("verificationCodeError");
+            if (!verificationCodeInput.checkValidity()) {
+                verificationCodeError.textContent = "Ingrese solo un dígito numérico sin espacios ni caracteres especiales.";
+                return false;
+            } else {
+                verificationCodeError.textContent = "";
+            }
+
+            // Validación de la ayuda seleccionada
+            var helpTypeInput = document.getElementById("helpType");
+            if (helpTypeInput.value === "") {
+                alert("Seleccione un tipo de ayuda.");
+                return false;
+            }
+
+            // Validación de todas las preguntas
+            for (var i = 1; i <= 5; i++) {
+                var questionInput = document.getElementById("question" + i);
+                if (questionInput.value === "") {
+                    alert("Seleccione una opción para la Pregunta " + i + ".");
+                    return false;
+                }
+            }
+
+            // Almacenar la hora actual como la última vez que se realizó una encuesta
+            localStorage.setItem(lastSurveyTimeKey, new Date().toISOString());
+
+            return true;
+        }
+    </script>
+
+       <!-- Funciones_leer -->
+       <script>
+        // Función para leer el contenido
+        function leerContenido() {
+            // Obtener el contenido que se desea leer
+            var contenido = "Paginas Oficiales. SENAHMI, INDECI, IMARPE, SIGRID, CENEPRED, MEF.";
+    
+            // Crear un nuevo objeto de síntesis de voz
+            var synth = window.speechSynthesis;
+    
+            // Crear un nuevo mensaje de síntesis de voz
+            var utterance = new SpeechSynthesisUtterance(contenido);
+    
+            // Reproducir el mensaje
+            synth.speak(utterance);
+            }
+        </script>
+       <!-- Funciones_leer -->
+
+    <!-- Paginas_Oficiales -->
+    <div class="container-fluid py-5">
+        <div class="container pt-5 pb-3">
+            <div class="text-center mb-3 pb-3">
+                <h6 class="text-danger text-uppercase" style="letter-spacing: 5px;">Paginas</h6>
+                <h1>Oficiales</h1>
+                <button id="leerPaginasOficiales" onclick="leerContenido()" aria-label="Leer Paginas Oficiales" style="font-size: 24px; background: none; border: none; cursor: pointer;">
+                    🔊
+                </button>
+                
+            </div>
+            <div class="row">
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="destination-item position-relative overflow-hidden mb-2">
+                            <img class="img-fluid" src="img/logo_entidad_1.jpg" alt="">
+                            <a class="destination-overlay text-white text-decoration-none" href="https://www.senamhi.gob.pe/?p=pronostico-meteorologico">
+                                <h5 class="text-white font-weight-bold">SENAHMI</h5>
+                                <span class="text-center">Servicio Nacional de Meteorología e Hidrología del Perú</span>
+                            </a>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="destination-item position-relative overflow-hidden mb-2">
+                        <img class="img-fluid" src="img/logo_entidad_2.jpg" alt="">
+                        <a class="destination-overlay text-white text-decoration-none" href="https://www.mef.gob.pe/es/?option=com_content&language=es-ES&Itemid=101574&lang=es-ES&view=article&id=2366">
+                            <h5 class="text-white font-weight-bold">INDECI</h5>
+                            <span>Instituto Nacional de Defensa Civil</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="destination-item position-relative overflow-hidden mb-2">
+                        <img class="img-fluid" src="img/logo_entidad_3.jpg" alt="">
+                        <a class="destination-overlay text-white text-decoration-none" href="https://www.imarpe.gob.pe/imarpe/detallereport.php">
+                            <h5 class="text-white font-weight-bold">IMARPE</h5>
+                            <span>Instituto del Mar del Perú</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="destination-item position-relative overflow-hidden mb-2">
+                        <img class="img-fluid" src="img/logo_entidad_4.jpg" alt="">
+                        <a class="destination-overlay text-white text-decoration-none" href="https://sigrid.cenepred.gob.pe/sigridv3/">
+                            <h5 class="text-white font-weight-bold">SIGRID</h5>
+                            <span class="text-center">Sistema de Información Geográfica para la Gestión del Riesgo de Desastres</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="destination-item position-relative overflow-hidden mb-2">
+                        <img class="img-fluid" src="img/logo_entidad_5.jpg" alt="">
+                        <a class="destination-overlay text-white text-decoration-none" href="https://www.cenepred.gob.pe/web/preguntas-frecuentes/">
+                            <h5 class="text-white font-weight-bold">CENEPRED</h5>
+                            <span class="text-center">Centro Nacional de Estimación, Prevención y Reducción del Riesgo de Desastres</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="destination-item position-relative overflow-hidden mb-2">
+                        <img class="img-fluid" src="img/logo_entidad_6.jpg" alt="">
+                        <a class="destination-overlay text-white text-decoration-none" href="https://www.mef.gob.pe/es/?option=com_content&language=es-ES&Itemid=101574&lang=es-ES&view=article&id=2366">
+                            <h5 class="text-white font-weight-bold">MEF</h5>
+                            <span class="text-center">Ministerio de Economía y Finanzas</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Pagina_oficial -->
+
+    <!-- Pie de pagina -->
+    <div class="container-fluid bg-dark text-white-50 py-5 px-sm-3 px-lg-5" style="margin-top: 90px;">
+        <div class="row pt-5">
+            <div class="col-lg-3 col-md-6 mb-5">
+                <a href="" class="navbar-brand">
+                    <h1 class="text-primary"><span class="text-white">ALERTA </span><span class="text-danger">ÑAWI</span></h1>
+                </a>
+                <p>Teléfono:</p>
+                <p>(01) 330 3000 Anexo 3411, 3484</p>
+                <p>974 890720</p>
+                <h6 class="text-white text-uppercase mt-4 mb-3" style="letter-spacing: 5px;">SIGUENOS</h6>
+                <div class="d-flex justify-content-start">
+                    <a class="btn btn-outline-danger btn-square mr-2" href="#"><i class="fab fa-twitter text-danger"></i></a>
+                    <a class="btn btn-outline-danger btn-square mr-2" href="#"><i class="fab fa-facebook-f text-danger"></i></a>
+                    <a class="btn btn-outline-danger btn-square mr-2" href="#"><i class="fab fa-linkedin-in text-danger"></i></a>
+                    <a class="btn btn-outline-danger btn-square" href="#"><i class="fab fa-instagram text-danger"></i></a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-5">
+                <h5 class="text-white text-uppercase mb-4" style="letter-spacing: 5px;">OPCIONES</h5>
+                <div class="d-flex flex-column justify-content-start">
+                    <a class="text-white-50 mb-2" href="https://www.gob.pe/institucion/contraloria/informes-publicaciones/3985499-directorio-de-especialistas-regionales-monitores-ciudadanos-de-control">
+                        <i class="fa fa-angle-right mr-2"></i>Directorio de Especialistas Regionales
+                    </a>                    
+
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-5">
+                <h5 class="text-white text-uppercase mb-4" style="letter-spacing: 5px;"></h5>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-5">
+                <h5 class="text-white text-uppercase mb-4" style="letter-spacing: 5px;">OPCIONES</h5>
+                <div class="w-100">
+                    <div class="input-group">
+                        <textarea class="form-control border-light" style="resize: none;" rows="4" placeholder="Escribe tus comentarios aquí..."></textarea>
+                        <div class="input-group-append">
+                            <button class="btn btn-danger px-4">Enviar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+   <!-- Pie de pagina_final -->
+
+
+    <!-- Barra desplazadora -->
+    <a href="#" class="btn btn-lg btn-danger btn-lg-square back-to-top">
+        <i class="fa fa-angle-double-up text-white"></i>
+    </a>
+
+    <!-- Librerias-->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+    <script src="lib/easing/easing.min.js"></script>
+    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="lib/tempusdominus/js/moment.min.js"></script>
+    <script src="lib/tempusdominus/js/moment-timezone.min.js"></script>
+    <script src="lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+
+    <!-- Template -->
+    <script src="js/main.js"></script>
+</body>
+
+</html>
